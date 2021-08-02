@@ -16,3 +16,9 @@ interface SnowToggle {
 }
 
 export type MessageType = SnowRequest | SnowResponse | SnowToggle;
+
+export interface SessionInterface {
+    sessions: number;
+    studyTime: number;
+    breakTime: number;
+}

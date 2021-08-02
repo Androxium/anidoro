@@ -1,6 +1,6 @@
 {
-  "name": "Snow Extension",
-  "description": "Chrome Extension for making it snow in your browser!",
+  "name": "Pomodoro timer",
+  "description": "Level up your studying with this pomodoro timer Chrome extension.",
   "manifest_version": 2,
   "version": "1.0.0",
   "icons": {
