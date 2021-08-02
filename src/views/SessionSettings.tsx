@@ -7,14 +7,27 @@
 import React, { FC, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+// import type { SessionType } from '../types';
 
-const SessionSettings : FC = () => {
+
+export type SessionType = {
+    sessions: number;
+    studyTime: number;
+    breakTime: number;
+};
+
+interface SessionInterface_TODO_BetterName {
+    onStartHandler: (s: SessionType) => void;
+}
+
+const SessionSettings : FC<SessionInterface_TODO_BetterName> = ({onStartHandler}) => {
     const [sessions, setSessions] = useState(1);
     const [studyTime, setStudyTime] = useState(25);
     const [breakTime, setBreakTime] = useState(5);
 
     const onStartClick = () => {
         chrome.runtime.sendMessage({sessions, studyTime, breakTime});
+        onStartHandler({sessions, studyTime, breakTime});
     }
 
     return <div style={{width: 100, height: 100}}>
