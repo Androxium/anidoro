@@ -10,54 +10,57 @@ export type SessionType = {
     breakTime: number;
 };
 
+type Time = {
+    minutes: number;
+    seconds: number;
+    sessionsRemaining: number;
+}
+
 interface TimerInterface {
     session: SessionType;
     finishedSessionHandler: (s: number) => void;
 }
 
+
 const Timer : FC<TimerInterface> = ({session, finishedSessionHandler}) => {
-    const [minutes, setMinutes] = useState(session.studyTime);
-    const [seconds, setSeconds] = useState(0);
-    const [numOfSessions, setNumOfSessions] = useState(session.sessions);
-    const [isStudy, setIsStudy] = useState(true);
+    const [time, setTime] = useState<Time>({minutes: session.studyTime, seconds: 1, sessionsRemaining: session.sessions*2});
 
     useEffect(() => {
         setTimeout(() => {
-            let s : number = seconds;
-            let m : number = minutes;
-            let study: boolean = isStudy;
-            let sess: number = numOfSessions;
+            let s = time.seconds;
+            let m = time.minutes;
+            let sess = time.sessionsRemaining;
 
-            if (numOfSessions === 0) {
-                finishedSessionHandler(0);
-            }
-
+            // end of a study block or break block
             if (s === 0 && m === 0){
-                if (isStudy){
+                sess -= 1;
+                if (sess % 2 === 1){
                     m = session.breakTime;
                 } else {
-                    sess = numOfSessions-1;
                     m = session.studyTime;
                 }
                 s = 1
-                study = !isStudy;
+                // isStudy = !isStudy;
             }
 
+            // end of 1 minute
             if (s === 0){
-                m = minutes-1;
-                s = 60;
+                m = m-1;
+                s = 61;
             }
             s -= 1;
 
-            setSeconds(s);
-            setMinutes(m);
-            setIsStudy(study);
-            setNumOfSessions(sess);
+            // end of booked session
+            if (sess === 0) {
+                finishedSessionHandler(0);
+            }
+
+            setTime({minutes: m, seconds: s, sessionsRemaining: sess});
         }, 1000);
     });
 
-    return <div style={{width: 100}}>
-        {minutes}:{seconds}
+    return <div style={{width: 300, fontSize: 18, backgroundColor: time.sessionsRemaining % 2 === 0 ? 'green' : 'red'}}>
+        {time.minutes}:{time.seconds}
     </div>
 }
 
